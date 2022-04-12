@@ -4,6 +4,14 @@ const { Pizza } = require('../models');
 const pizzaController = {
     getAllPizza(req, res) {
         Pizza.find({})
+            .populate({
+                path: 'comments',
+                // the `-` means we DON'T care about the `__v`
+                select: '-__v'
+            })
+            .select('-__v')
+            // sort in DESC order
+            .sort({ _id: -1 })
             .then(dbPizzaData => res.json(dbPizzaData))
             .catch(err => {
                 console.log(err);
